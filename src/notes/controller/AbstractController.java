@@ -6,7 +6,7 @@ import restdisp.worker.AbstractWorker;
 
 public class AbstractController extends AbstractWorker {
 	static {
-		JapidRenderer.init(OpMode.dev, "src", 5);
+		JapidRenderer.init(OpMode.prod, ".", 5);
 	}
 
 	public String render(String view, Object... model) {

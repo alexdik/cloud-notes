@@ -1,5 +1,4 @@
-/.project
-/.classpath
-/.settings
-/bin
-/target
+/web/WEB-INF/classes
+/web/WEB-INF/appengine-generated
+src/japidviews/*.java
+src/japidviews/**/*.java
