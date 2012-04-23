@@ -1,29 +1,57 @@
 package notes.model;
 
+import java.util.List;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class User {
 	@PrimaryKey
-	private String name;
-	private String key;
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key userKey;
+	private String userName;
+	private String socId;
 	
-	public User(String name, String key) {
-		this.name = name;
-		this.key = key;
+	@Persistent(mappedBy = "user")
+    private List<Note> noteSets;
+	
+	public User(Key userKey, String userName, String socId) {
+		this.userKey = userKey;
+		this.userName = userName;
+		this.socId = socId;
 	}
-	public String getName() {
-		return name;
+	public String getUserName() {
+		return userName;
 	}
-	public String getKey() {
-		return key;
+	public String getSecretKey() {
+		return userKey.getName();
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	public void setKey(String key) {
-		this.key = key;
+	public List<Note> getNoteSets() {
+		return noteSets;
+	}
+	public void setNoteSets(List<Note> noteSets) {
+		this.noteSets = noteSets;
+	}
+	public Key getUserKey() {
+		return userKey;
+	}
+	public void setUserKey(Key userKey) {
+		this.userKey = userKey;
+	}
+	public String getSocId() {
+		return socId;
+	}
+	public void setSocId(String socId) {
+		this.socId = socId;
 	}
 }

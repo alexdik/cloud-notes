@@ -1,23 +1,36 @@
 package notes.model;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
+
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Note {
-	private String name;
+	@PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Key noteKey;
+	private String noteName;
 	private String text;
+	
+	@Persistent
 	private User user;
 	
-	public Note(String name, String text, User user) {
-		this.name = name;
+	public Note(String noteName, String text) {
+		this.noteName = noteName;
 		this.text = text;
-		this.user = user;
 	}
-	public String getName() {
-		return name;
+	public String getNoteName() {
+		return noteName;
+	}
+	public void setNoteName(String noteName) {
+		this.noteName = noteName;
 	}
 	public String getText() {
 		return text;
-	}
-	public void setName(String name) {
-		this.name = name;
 	}
 	public void setText(String text) {
 		this.text = text;
@@ -25,7 +38,10 @@ public class Note {
 	public User getUser() {
 		return user;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public Key getNoteKey() {
+		return noteKey;
+	}
+	public void setNoteKey(Key noteKey) {
+		this.noteKey = noteKey;
 	}
 }
