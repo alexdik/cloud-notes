@@ -19,7 +19,7 @@ public class User {
 	private String userName;
 	private String socId;
 	
-	@Persistent(mappedBy = "user")
+	@Persistent(mappedBy = "user", defaultFetchGroup="true")
     private List<Note> noteSets;
 	
 	public User(Key userKey, String userName, String socId) {

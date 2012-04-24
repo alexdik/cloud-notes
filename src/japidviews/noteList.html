@@ -1,0 +1,7 @@
+@args String user, java.util.List notes
+@extends main(user)
+<ul>
+	@each notes | notes.model.Note note
+	<li>$note.getNoteName()</li>
+	@
+</ul>

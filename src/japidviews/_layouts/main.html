@@ -1,11 +1,15 @@
+@args String user 
+@Date date = new java.util.Date();
 <html>
 	<head>
 		<title>Home</title>
 		<link rel="stylesheet" type="text/css" href="/css/styles.css">
 	</head>
 	<body>
+	@t login(user)@
+	
 	@doLayout
 	
-	Date: @get date@
+	Date: $date
 	</body>
 </html>

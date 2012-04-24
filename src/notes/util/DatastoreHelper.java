@@ -108,10 +108,12 @@ public class DatastoreHelper {
 	}
 	
 	public static void test2() {
-//		System.out.println(createUser("Tom", "id11516f554").getSecretKey());
-//		createNote("6e7641af-967d-4380-960c-199f01604fb4", "test Note", "content 123");
-		updateNote("6e7641af-967d-4380-960c-199f01604fb4", 27, new Note("upd", "cont"));
-//		System.out.println(getNote("1e471999-4f44-4081-8b0e-714eca2b35fc", 251).getText());
+//		String key = createUser("Tom", "id11516f554").getSecretKey();
+//		createNote(key, "note1", "content 123");
+//		createNote(key, "note2", "abc");
+//		updateNote(key, 27, new Note("upd", "cont"));
+//		System.out.println(getUser("6ff8d868-dec7-4295-98d9-7869d797dd0d"));
+//		System.out.println(getNote("6ff8d868-dec7-4295-98d9-7869d797dd0d", 2).getText());
 	}
 	
 	public static void test3() {
