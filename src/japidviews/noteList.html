@@ -1,7 +1,16 @@
 @args String user, java.util.List notes
 @extends main(user)
-<ul>
+
+<a class="btn" href="/p/new"><i class="icon-plus"></i> Add</a>
+</br></br>
+
+<table class="table">
 	@each notes | notes.model.Note note
-	<li>$note.getNoteName()</li>
+	<tr onclick="document.location = '/p/edit/$note.getNoteKey().getId()';">
+		<td class="table-row">
+			$note.getNoteName()
+		</td>
+	</tr>
 	@
-</ul>
+</table>
+

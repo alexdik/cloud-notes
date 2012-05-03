@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
 import notes.model.Note;
 import notes.model.User;
@@ -19,8 +18,8 @@ public class DatastoreHelper {
 		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
 		try {
 			UUID uid = UUID.randomUUID();
-			String secretKey = uid.toString();
-			Key key = KeyFactory.createKey(User.class.getSimpleName(), secretKey);
+			String userKey = uid.toString();
+			Key key = KeyFactory.createKey(User.class.getSimpleName(), userKey);
 			User user = new User(key, userName, socId);
 			pm.makePersistent(user);
 			return user;
@@ -29,10 +28,10 @@ public class DatastoreHelper {
 		}
 	}
 	
-	public static User getUser(String secretKey) {
+	public static User getUser(String userKey) {
 		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
 		try {
-			User user = pm.getObjectById(User.class, secretKey);
+			User user = pm.getObjectById(User.class, userKey);
 			return user;
 		} catch (JDOObjectNotFoundException e) {
 			return null;
@@ -41,11 +40,10 @@ public class DatastoreHelper {
 		}
 	}
 	
-	public static void createNote(String secretKey, String noteName, String text) {
+	public static void createNote(String userKey, Note note) {
 		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
 		try {
-			User user = getUser(secretKey);
-			Note note = new Note(noteName, text);
+			User user = pm.getObjectById(User.class, userKey);
 			List<Note> notes = user.getNoteSets();
 			if (notes == null) {
 				notes = new ArrayList<Note>();
@@ -58,10 +56,10 @@ public class DatastoreHelper {
 		}
 	}
 	
-	public static Note getNote(String secretKey, long noteId) {
+	public static Note getNote(String userKey, long noteId) {
 		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
 		try {
-			User user = getUser(secretKey);
+			User user = pm.getObjectById(User.class, userKey);
 			Key childKey = user.getUserKey().getChild(Note.class.getSimpleName(), noteId);
 			Note note = pm.getObjectById(Note.class, childKey);
 			return note;
@@ -72,10 +70,24 @@ public class DatastoreHelper {
 		}
 	}
 	
-	public static void updateNote(String secretKey, long noteId, Note newNote) {
+	public static Object[] getUserAndNote(String userKey, long noteId) {
 		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
 		try {
-			User user = getUser(secretKey);
+			User user = pm.getObjectById(User.class, userKey);
+			Key childKey = user.getUserKey().getChild(Note.class.getSimpleName(), noteId);
+			Note note = pm.getObjectById(Note.class, childKey);
+			return new Object[] {user, note};
+		} catch (JDOObjectNotFoundException e) {
+			return null;
+		} finally {
+			pm.close();
+		}
+	}
+	
+	public static void updateNote(String userKey, long noteId, Note newNote) {
+		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
+		try {
+			User user = pm.getObjectById(User.class, userKey);
 			Key childKey = user.getUserKey().getChild(Note.class.getSimpleName(), noteId);
 			newNote.setNoteKey(childKey);
 
@@ -92,50 +104,13 @@ public class DatastoreHelper {
 		}
 	}
 	
-	public static void test() {
+	public static void deleteNote(String userKey, long noteId) {
 		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
 		try {
-			User user = null;
-			Note note = new Note("test Note", "content 123");
-			List<Note> lst = new ArrayList<Note>();
-			lst.add(note);
-			
-//			user.setNoteSets(lst);
-			pm.makePersistent(user);
-		} finally {
-			pm.close();
-		}
-	}
-	
-	public static void test2() {
-//		String key = createUser("Tom", "id11516f554").getSecretKey();
-//		createNote(key, "note1", "content 123");
-//		createNote(key, "note2", "abc");
-//		updateNote(key, 27, new Note("upd", "cont"));
-//		System.out.println(getUser("6ff8d868-dec7-4295-98d9-7869d797dd0d"));
-//		System.out.println(getNote("6ff8d868-dec7-4295-98d9-7869d797dd0d", 2).getText());
-	}
-	
-	public static void test3() {
-		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
-		try {
-			Query query = pm.newQuery(User.class);
-			query.setFilter("userName == userNameParam");
-		    query.declareParameters("String userNameParam");
-
-		    @SuppressWarnings("unchecked")
-			List<User> results = (List<User>) query.execute("Taro");
-		    System.out.println(results.size());
-		    System.out.println(results.get(1).getUserName());
-		    Key key = results.get(0).getUserKey();
-			
-//			Key key = KeyFactory.createKey(User.class.getSimpleName(), 1);
-			Key childKey = key.getChild(Note.class.getSimpleName(), 2);
+			User user = pm.getObjectById(User.class, userKey);
+			Key childKey = user.getUserKey().getChild(Note.class.getSimpleName(), noteId);
 			Note note = pm.getObjectById(Note.class, childKey);
-		    
-		    System.out.println(note == null);
-		    System.out.println(note.getNoteKey().getId());
-		    
+			pm.deletePersistent(note);
 		} finally {
 			pm.close();
 		}

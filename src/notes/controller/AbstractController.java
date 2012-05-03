@@ -1,5 +1,9 @@
 package notes.controller;
 
+import javax.servlet.http.Cookie;
+
+import notes.util.Const;
+
 import cn.bran.japid.compiler.OpMode;
 import cn.bran.japid.template.JapidRenderer;
 import restdisp.worker.AbstractWorker;
@@ -11,5 +15,14 @@ public class AbstractController extends AbstractWorker {
 
 	public String render(String view, Object... model) {
 		return JapidRenderer.renderWith(view, model);
+	}
+	
+	public String getUserKey() {
+		for (Cookie cookie : getRequest().getCookies()) {
+			if (cookie.getName().equals(Const.AUTH)) {
+				return cookie.getValue();
+			}
+		}
+		return null;
 	}
 }

@@ -6,6 +6,10 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import notes.util.Const;
+
+import com.google.appengine.api.datastore.Text;
+
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
@@ -14,14 +18,16 @@ public class Note {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key noteKey;
 	private String noteName;
-	private String text;
+	private Text text;
 	
 	@Persistent
 	private User user;
 	
-	public Note(String noteName, String text) {
-		this.noteName = noteName;
-		this.text = text;
+	public Note(String text) {
+		int noteLen = text.length() > Const.MAX_NOTE_NAME_LEN ? Const.MAX_NOTE_NAME_LEN : text.length();
+		String name = text.substring(0, noteLen).split("\r")[0];
+		this.noteName = name;
+		this.text = new Text(text);
 	}
 	public String getNoteName() {
 		return noteName;
@@ -30,10 +36,10 @@ public class Note {
 		this.noteName = noteName;
 	}
 	public String getText() {
-		return text;
+		return text.getValue();
 	}
 	public void setText(String text) {
-		this.text = text;
+		this.text = new Text(text);
 	}
 	public User getUser() {
 		return user;
