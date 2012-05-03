@@ -12,7 +12,11 @@ import notes.util.DatastoreHelper;
 
 public class Auth extends AbstractWorker {
 	public void authenticate(String userName, String userId) throws IOException {
-		User user = DatastoreHelper.createUser(userName, userId);
+		User user = DatastoreHelper.getUser(userId);
+		
+		if (user == null) {
+			user = DatastoreHelper.createUser(userName, userId);
+		}
 		
 		Cookie cookie = new Cookie(Const.AUTH, user.getSecretKey());
 		cookie.setMaxAge(86400);

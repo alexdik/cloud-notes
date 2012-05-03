@@ -1,3 +1,4 @@
+@ import static org.apache.commons.lang.StringEscapeUtils.escapeHtml
 @args String user, notes.model.Note note
 @extends main(user)
 
@@ -21,7 +22,7 @@
 
 <form id="edit" name="input" action="/p/update/$note.getNoteKey().getId()" method="post">
     <div class="spacer">
-		<textarea class="input-xlarge expanding" name="text" placeholder="Type something...">$note.getText()</textarea>
+		<textarea class="input-xlarge expanding" name="text" placeholder="Type something...">$escapeHtml(note.getText())</textarea>
 	</div>
 </form>
 
