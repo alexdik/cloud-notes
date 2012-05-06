@@ -1,9 +1,12 @@
 @ import static org.apache.commons.lang.StringEscapeUtils.escapeHtml
-@args String user, java.util.List notes
+@args notes.model.User user, java.util.List notes
 @extends main(user)
 
-<a class="btn" href="/p/new"><i class="icon-plus"></i> Add</a>
-</br></br>
+<div class="btn-toolbar">
+	<div class="btn-group">
+		<a class="btn" href="/p/new"><i class="icon-plus"></i> Add</a>
+	</div>
+</div>
 
 <table class="table">
 	@each notes | notes.model.Note note

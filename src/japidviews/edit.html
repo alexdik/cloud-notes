@@ -1,11 +1,10 @@
 @ import static org.apache.commons.lang.StringEscapeUtils.escapeHtml
-@args String user, notes.model.Note note
+@args notes.model.User user, notes.model.Note note
 @extends main(user)
-
 
 <div class="btn-toolbar">
 	<div class="btn-group">
-		<a class="btn btn-primary" onclick="document.forms['edit'].submit();"><i class="icon-ok"></i> Save</a>
+		<a class="btn btn-primary" onclick="document.forms['edit'].submit();" title="ctrl+Enter"><i class="icon-ok"></i> Save</a>
 	</div>
 	<div class="btn-group">
 		<a class="btn" href="/p/list"><i class="icon-backward"></i> Back</a>
@@ -22,9 +21,9 @@
 
 <form id="edit" name="input" action="/p/update/$note.getNoteKey().getId()" method="post">
     <div class="spacer">
-		<textarea class="input-xlarge expanding" name="text" placeholder="Type something...">$escapeHtml(note.getText())</textarea>
+		<textarea class="input-xlarge expanding" name="text" onkeypress="ctrlEnter(event, document.forms['edit']);" placeholder="Type something...">$escapeHtml(note.getText())</textarea>
 	</div>
 </form>
 
 <form id="delete" name="input" action="/p/delete/$note.getNoteKey().getId()" method="post">
-</form> 
+</form>

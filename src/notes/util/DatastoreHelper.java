@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import notes.model.Note;
 import notes.model.User;
@@ -29,11 +30,34 @@ public class DatastoreHelper {
 	}
 	
 	public static User getUser(String userKey) {
+		if (userKey == null)
+			return null;
+		
 		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
 		try {
 			User user = pm.getObjectById(User.class, userKey);
 			return user;
 		} catch (JDOObjectNotFoundException e) {
+			return null;
+		} finally {
+			pm.close();
+		}
+	}
+	
+	public static User getUserById(String socId) {
+		PersistenceManager pm = DatastoreManager.get().getPersistenceManager();
+		try {
+			Query q = pm.newQuery("select from notes.model.User " +
+                "where 	socId == socKey " +
+                "parameters String socKey");
+
+			@SuppressWarnings("unchecked")
+			List<User> results = (List<User>) q.execute(socId);
+			
+			if (results != null && results.size() > 0) {
+				return results.get(0);
+			}
+			
 			return null;
 		} finally {
 			pm.close();
@@ -89,16 +113,11 @@ public class DatastoreHelper {
 		try {
 			User user = pm.getObjectById(User.class, userKey);
 			Key childKey = user.getUserKey().getChild(Note.class.getSimpleName(), noteId);
-			newNote.setNoteKey(childKey);
-
-			List<Note> notes = user.getNoteSets();
-			if (notes == null) {
-				notes = new ArrayList<Note>();
-				user.setNoteSets(notes);
-			}
+			Note note = pm.getObjectById(Note.class, childKey);
 			
-			notes.add(newNote);
-			pm.makePersistent(user);
+			note.setNoteName(newNote.getNoteName());
+			note.setText(newNote.getText());
+			pm.makePersistent(note);
 		} finally {
 			pm.close();
 		}

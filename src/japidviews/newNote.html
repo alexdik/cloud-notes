@@ -1,12 +1,17 @@
-@args String user
+@args notes.model.User user
 @extends main(user)
 
-<a class="btn btn-primary" onclick="document.forms['add'].submit();"><i class="icon-ok"></i> Save</a>
-<a class="btn" href="/p/list"><i class="icon-backward"></i> Back</a>
-</br></br>
+<div class="btn-toolbar">
+	<div class="btn-group">
+		<a class="btn btn-primary" onclick="document.forms['add'].submit();" title="ctrl+Enter"><i class="icon-ok"></i> Save</a>
+	</div>
+	<div class="btn-group">
+		<a class="btn" href="/p/list"><i class="icon-backward"></i> Back</a>
+	</div>
+</div>
 
 <form id="add" name="input" action="/p/add" method="post">
 	<div class="spacer">
-		<textarea class="input-xlarge expanding" name="text" placeholder="Type something..."></textarea>
+		<textarea class="input-xlarge expanding" name="text" onkeypress="ctrlEnter(event, document.forms['add']);" placeholder="Type something..."></textarea>
 	</div>
 </form>

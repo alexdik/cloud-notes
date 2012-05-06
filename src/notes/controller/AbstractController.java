@@ -18,9 +18,11 @@ public class AbstractController extends AbstractWorker {
 	}
 	
 	public String getUserKey() {
-		for (Cookie cookie : getRequest().getCookies()) {
-			if (cookie.getName().equals(Const.AUTH)) {
-				return cookie.getValue();
+		if(getRequest().getCookies() != null) {
+			for (Cookie cookie : getRequest().getCookies()) {
+				if (cookie.getName().equals(Const.AUTH)) {
+					return cookie.getValue();
+				}
 			}
 		}
 		return null;

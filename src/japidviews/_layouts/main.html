@@ -1,8 +1,9 @@
-@args String user 
+@args notes.model.User user 
 @Date date = new java.util.Date();
 <!DOCTYPE html>
 <html>
 	<head>
+		<link rel="shortcut icon" href="/res/pen_16x16.png" />
 		<meta charset=utf-8 />
 		<title>Notes</title>
 		<link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
@@ -10,6 +11,7 @@
 		<script type='text/javascript' src='/js/jquery-1.7.2.min.js'></script>
 		<script type='text/javascript' src='/js/expanding.js'></script>
 		<script src="/bootstrap/js/bootstrap-dropdown.js"></script>
+		<script src="/js/script.js"></script>
 	</head>
 	<body>
 	
@@ -17,25 +19,14 @@
       <div class="navbar-inner">
         <div class="container-fluid">
           <a class="brand">Cloupad</a>
-          <div class="btn-group pull-right">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-user"></i> Username
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Sign Out</a></li>
-            </ul>
-          </div>
+		  @t login(user)@
         </div>
       </div>
     </div>
-	
-	@t login(user)@
 	
 	<div class="container-fluid">
 		@doLayout
 	</div>
 	
-	Date: $date
 	</body>
 </html>

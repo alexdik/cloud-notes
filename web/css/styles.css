@@ -31,3 +31,10 @@ tr td {
 	height: 35px;	
 }
 	
+h1 {
+	margin-bottom: 55px;
+}
+
+.expanding {
+	overflow: hidden;
+}

@@ -1,2 +1,13 @@
-@args String user
-Hi there $user
+@args notes.model.User user
+
+@if (!user.getUserName().equals("No user found")) {
+	<div class="btn-group pull-right">
+	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	    <i class="icon-user"></i> $user.getUserName()
+	    <span class="caret"></span>
+	  </a>
+	  <ul class="dropdown-menu">
+	    <li><a href="/p/auth/signOut">Logout</a></li>
+	  </ul>
+	</div>
+@}

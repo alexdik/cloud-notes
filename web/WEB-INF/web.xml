@@ -19,5 +19,21 @@
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>/p/*</url-pattern>
 	</servlet-mapping>
-	
+
+	<servlet>
+		<servlet-name>redirect</servlet-name>
+		<servlet-class>notes.controller.Redirect</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>redirect</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/p</location>
+	</error-page>
+
 </web-app>
